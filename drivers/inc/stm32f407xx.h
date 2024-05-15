@@ -186,6 +186,11 @@ typedef struct
 //SYSCFG pointer 
 #define SYSCFG                                                          ((SYSCFG_RegDef_t *)SYSCFG_BASEADDR)
 
+// SPI pointer
+
+#define SPI1															((SPI_RegDef_t *)SPI1_BASEADDR)
+#define SPI2															((SPI_RegDef_t *)SPI2_BASEADDR)
+#define SPI3															((SPI_RegDef_t *)SPI3_BASEADDR)
 //clock enable macros for GPIOx peripherals
 
 #define GPIOA_PCLK_EN() 	(RCC->AHB1ENR |= 1<<0)
