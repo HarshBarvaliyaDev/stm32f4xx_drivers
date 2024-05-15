@@ -1,6 +1,6 @@
 # this files and directories created automatically when you create project in stm32cubeIDE
 .settings/
-.vscode/
+.vscode/ #this directory is created when you open project is vscode.
 Debug/
 Startup
 .cproject
