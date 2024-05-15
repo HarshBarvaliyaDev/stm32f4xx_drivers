@@ -1,0 +1,10 @@
+# this files and directories created automatically when you create project in stm32cubeIDE
+.settings/
+.vscode/
+Debug/
+Startup
+.cproject
+.project
+stm32f4xx_drivers.launch
+STM32F407VETX_FLASH.ld
+STM32F407VETX_RAM.ld
