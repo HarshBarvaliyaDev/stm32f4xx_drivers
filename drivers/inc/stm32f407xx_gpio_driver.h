@@ -12,11 +12,11 @@
 
 
 typedef struct {
-    uint8_t gpioPinNumber;					// possible values @GPIO_PIN_NUM
-    uint8_t gpioPinMode;					// possible values @GPIO_MODE
-    uint8_t gpioPinSpeed;					// possible values @GPIO_SPEED
-    uint8_t gpioPuPdControl;				// possible values @GPIO_PUPD
-    uint8_t gpioPinOpType;					// possible values @GPIO_TYPE
+    uint8_t gpioPinNumber;					// possible values @gpioPinNumber
+    uint8_t gpioPinMode;					// possible values @gpioPinMode
+    uint8_t gpioPinSpeed;					// possible values @gpioPinSpeed
+    uint8_t gpioPuPdControl;				// possible values @gpioPuPdControl
+    uint8_t gpioPinOpType;					// possible values @gpioPinOpType
     uint8_t gpioPinAltFuncMode;
 } GPIO_PinConfig_t;
 
@@ -26,7 +26,7 @@ typedef struct{
     GPIO_PinConfig_t GPIO_PinConfig;
 }GPIO_Handle_t;
 
-//****************** MACROS FOR GPIO PIN NUMBER @GPIO_PIN_NUM
+//****************** MACROS FOR GPIO PIN NUMBER @gpioPinNumber
 #define GPIO_PIN_NUM_0			0
 #define GPIO_PIN_NUM_1			1
 #define GPIO_PIN_NUM_2			2
@@ -45,7 +45,7 @@ typedef struct{
 #define GPIO_PIN_NUM_15			15
 
 //****************** MACROS FOR GPIO PIN NUMBER
-//****************** MACROS FOR MODE OF THE GPIO PIN @GPIO_MODE
+//****************** MACROS FOR MODE OF THE GPIO PIN @gpioPinMode
 #define GPIO_MODE_IN			0
 #define GPIO_MODE_OUT			1
 #define GPIO_MODE_ALTFN			2
@@ -56,13 +56,13 @@ typedef struct{
 //****************** MACROS FOR MODE OF THE GPIO PIN
 
 
-//****************** MACROS FOR GPIO PIN TYPE @GPIO_TYPE
+//****************** MACROS FOR GPIO PIN TYPE @gpioPinOpType 
 #define GPIO_TYPE_PP			0 	// GPIO type push pull
 #define GPIO_TYPE_OD			1	// GPIO type open drain.
 //*******************MACROS FOR GPIO PIN TYPE
 
 
-//****************** MACROS FOR GPIO PIN SPEED @GPIO_SPEED
+//****************** MACROS FOR GPIO PIN SPEED @gpioPinSpeed
 #define GPIO_SPEED_LOW			0
 #define GPIO_SPEED_MEDIUM		1
 #define GPIO_SPEED_HIGH			2
@@ -70,7 +70,7 @@ typedef struct{
 //****************** MACROS FOR GPIO PIN SPEED
 
 
-//****************** MACROS FOR GPIO PIN PULL UP AND PULL DOWN CONFIGURATION @GPOI_PUPD
+//****************** MACROS FOR GPIO PIN PULL UP AND PULL DOWN CONFIGURATION @gpioPuPdControl
 #define GPIO_NO_PUPD			0
 #define GPIO_PU					1
 #define GPIO_PD					2

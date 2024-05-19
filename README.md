@@ -38,7 +38,7 @@ click on "add" and then on "workspace"
 
 ![image](https://github.com/HarshBarvaliyaDev/stm32f4xx_drivers/assets/107980330/b3f18cf1-d466-482e-8670-d6ed780a33f6)
 
-select "stm32_driver" and then add "driver/inc" and "driver/src" one bye one
+select "stm32_driver" and then add "driver/inc" and "driver/src" one by one
 
 ![image](https://github.com/HarshBarvaliyaDev/stm32f4xx_drivers/assets/107980330/d34742f1-85b1-435b-8df5-65528e960e49)
 

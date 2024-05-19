@@ -93,64 +93,64 @@ void GPIO_Deinit(GPIO_RegDef_t * pGPIO){
 void GPIO_PCLKControl(GPIO_RegDef_t * pGPIO , uint8_t EnorDi){
 
 	if( EnorDi == ENABLE){
-		switch ((int)pGPIO) {
-			case (int)GPIOA:
+		switch ((uint32_t)pGPIO) {
+			case (uint32_t)GPIOA:
 				GPIOA_PCLK_EN();
 				break;
-			case (int)GPIOB:
+			case (uint32_t)GPIOB:
 				GPIOB_PCLK_EN();
 				break;
-			case (int)GPIOC:
+			case (uint32_t)GPIOC:
 				GPIOC_PCLK_EN();
 				break;
-			case (int)GPIOD:
+			case (uint32_t)GPIOD:
 				GPIOD_PCLK_EN();
 				break;
-			case (int)GPIOE:
+			case (uint32_t)GPIOE:
 				GPIOE_PCLK_EN();
 				break;
-			case (int)GPIOF:
+			case (uint32_t)GPIOF:
 				GPIOF_PCLK_EN();
 				break;
-			case (int)GPIOG:
+			case (uint32_t)GPIOG:
 				GPIOG_PCLK_EN();
 				break;
-			case (int)GPIOH:
+			case (uint32_t)GPIOH:
 				GPIOH_PCLK_EN();
 				break;
-			case (int)GPIOI:
+			case (uint32_t)GPIOI:
 				GPIOI_PCLK_EN();
 				break;
 
 		}
 	}else if ( EnorDi == DISABLE){
 
-		switch ((int)pGPIO) {
-			case (int)GPIOA:
+		switch ((uint32_t)pGPIO) {
+			case (uint32_t)GPIOA:
 				GPIOA_PCLK_DI();
 				break;
-			case (int)GPIOB:
+			case (uint32_t)GPIOB:
 				GPIOB_PCLK_DI();
 				break;
-			case (int)GPIOC:
+			case (uint32_t)GPIOC:
 				GPIOC_PCLK_DI();
 				break;
-			case (int)GPIOD:
+			case (uint32_t)GPIOD:
 				GPIOD_PCLK_DI();
 				break;
-			case (int)GPIOE:
+			case (uint32_t)GPIOE:
 				GPIOE_PCLK_DI();
 				break;
-			case (int)GPIOF:
+			case (uint32_t)GPIOF:
 				GPIOF_PCLK_DI();
 				break;
-			case (int)GPIOG:
+			case (uint32_t)GPIOG:
 				GPIOG_PCLK_DI();
 				break;
-			case (int)GPIOH:
+			case (uint32_t)GPIOH:
 				GPIOH_PCLK_DI();
 				break;
-			case (int)GPIOI:
+			case (uint32_t)GPIOI:
 				GPIOI_PCLK_DI();
 				break;
 
@@ -190,7 +190,7 @@ void GPIO_ToggleOutputPin(GPIO_RegDef_t * pGPIO , uint8_t pinNumber){
 }
 
 
-//GPIO IRQ config
+//GPIO IRQ config processor side
 void GPIO_IRQConfig(uint8_t IRQNumber  , uint8_t EnorDi){
 
 	if( EnorDi == ENABLE){
@@ -205,14 +205,15 @@ void GPIO_IRQConfig(uint8_t IRQNumber  , uint8_t EnorDi){
 
 }
 
-
+// priority config processor side
 void GPIO_IRQPriorityConfig( uint8_t IRQNumber, uint8_t IRQPriority){
 
+	if ( IRQPriority <= NoChangeInPriority)
+		return;
+	
 	*((uint32_t *)(NVIC_IPRx + (IRQNumber/4)*4)) &=  ~(0xFF << (IRQNumber%4)*8);
 	*((uint32_t *)(NVIC_IPRx + (IRQNumber/4)*4)) |=  IRQPriority << (IRQNumber%4)*8;
-
-
-	
-	
+		
 }
+
 void GPIO_IRQHandling(uint8_t pinNumber);

@@ -226,6 +226,13 @@ typedef struct
 #define SPI3_PCLK_EN()     (RCC->APB1ENR |= 1 << 15)
 
 
+// SPI RESET MACROS FOR SPIx PERIPHERALS
+#define SPI1_REG_RST()     RCC->APB2RSTR |= 1 << 12; RCC->APB2RSTR &= ~(1 << 12);
+#define SPI2_REG_RST()     RCC->APB1RSTR |= 1 << 14; RCC->APB1RSTR &= ~(1 << 14);
+#define SPI3_REG_RST()     RCC->APB1RSTR |= 1 << 15; RCC->APB1RSTR &= ~(1 << 15);
+
+
+
 //CLOCK ENABLE MACROS FOR USARTx PERIPHERALS
 #define USART1_PCLK_EN()   (RCC->APB2ENR |= 1 << 4)
 #define USART2_PCLK_EN()   (RCC->APB1ENR |= 1 << 17)
@@ -281,7 +288,7 @@ typedef struct
 
 
 // some generic macros
-#define ENABLE 			1
+#define ENABLE 		1
 #define DISABLE 		0
 #define SET 			ENABLE
 #define RESET 			DISABLE
