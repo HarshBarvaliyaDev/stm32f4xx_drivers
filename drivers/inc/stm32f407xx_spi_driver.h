@@ -24,7 +24,8 @@ typedef struct {
     uint8_t SPI_CPOL;               // possibe value is 0 or 1
     uint8_t SPI_SSM;                // @SPI_SSM
     uint8_t SPI_SclkSpeed;          // @SPI_SclkSpeed
-    uint8_t SPI_MSB_LSB             // @SPI_MSB_LSB
+    uint8_t SPI_MSB_LSB ;            // @SPI_MSB_LSB
+    uint8_t SPI_IRQtype;
 } SPI_Config_t;
 
 // @SPI_DeviceMode
@@ -68,6 +69,13 @@ typedef struct {
 #define SPI_LSB_FIRST               1
 #define SPI_MSB_FIRST               0
 
+// @SPI_IRQtype @irq_type
+#define SPI_TX_IRQ              0  // interrupt processor on completion of transmission 
+#define SPI_RX_IRQ              1   // interrupt processor on completion of receive.
+#define SPI_TXRX_IRQ            2   // interrupt processor on completion of both of above
+#define SPI_NOIRQ               3
+
+
 //spi bit macros for SPI_CR1 register BIT POSITIONS
 #define SPI_CR1_CPHA            0
 #define SPI_CR1_CPOL            1
@@ -95,8 +103,8 @@ typedef struct {
 
 //spi bit macros for SPI_SR register BIT POSITIONS
 
-#define SPI_SR_RXNE             0
-#define SPI_SR_TXE              1
+#define SPI_SR_RXNE             0 //receiver not empty
+#define SPI_SR_TXE              1 //transmitter empty
 #define SPI_SR_CHSIDE           2
 #define SPI_SR_UDR              3
 #define SPI_SR_CRCERR           4
@@ -105,14 +113,23 @@ typedef struct {
 #define SPI_SR_BSY              7
 #define SPI_SR_FRE              8
 
+
+
+
+
 typedef struct {
     SPI_Config_t  SPI_config;
     SPI_RegDef_t * pSPI;
 }SPI_Handle_t;
 
 
+//macro for reading dff bit in cr1 register
+#define READ_DFF_SPI_CR1( peripheral_baseAddr) (peripheral_baseAddr->CR1 &= 1<<SPI_CR1_DFF)
 
 
+// macros for read txe and rxne flag in spi status register 
+#define READ_TXE_SPI_SR( peripheral_baseAddr) (peripheral_baseAddr->SR &= 1<<SPI_SR_TXE)
+#define READ_RXNE_SPI_SR( peripheral_baseAddr) (peripheral_baseAddr->SR &= 1<<SPI_SR_RXNE)
 
 
 
@@ -138,13 +155,13 @@ void SPI_PCLKClockControl ( SPI_RegDef_t * pSPI , uint8_t EnOrDi) ;
  *
  * @brief 			initialize spi peripheral
  *
- * @param[0]		spi_handle - SPI_Handle_t structure pointer which contains all the info we need to set
+ * @param[0]		spi_handle_ptr - SPI_Handle_t structure pointer which contains all the info we need to set
  *
  * @return			nothing.
  *
  * @note
  ************************************************************/
-void SPI_init ( SPI_Handle_t* spi_handle) ;
+void SPI_init ( SPI_Handle_t* spi_handle_ptr) ;
 
 /************************************************************
  *
@@ -162,18 +179,18 @@ void SPI_deinit ( SPI_RegDef_t* pSPI) ;
 
 /************************************************************
  *
- * @fn				SPI_sendData
+ * @fn				SPI_sendData_blocking
  *
  * @brief 			send data over spi peripheral
  *
  * @param[0]		pSPI - SPI_RegDef_t - base address of the peripheral we want to reset
  * @param[1]        TxBuffer - 8 bit we want to send
  * @param[2]        len        - length of the data
- * @return			returns the 8 bit that we sent.
+ * @return			0 or 1 , depending on the success of the transmission
  *
- * @note
+ * @note            this function can transmit arrays also , but we have to provide length in bytes
  ************************************************************/
-uint8_t SPI_sendData ( SPI_RegDef_t* pSPI , uint8_t * TxBuffer , uint32_t len);
+uint8_t SPI_sendData_blocking ( SPI_RegDef_t* pSPI , uint8_t * TxBuffer , uint32_t len);
 
 /************************************************************
  *
@@ -187,7 +204,7 @@ uint8_t SPI_sendData ( SPI_RegDef_t* pSPI , uint8_t * TxBuffer , uint32_t len);
  * 
  * @return			returns the 8 bit that we received.
  *
- * @note
+ * @note            this api will block the execution as it uses while loop
  ************************************************************/
 uint8_t SPI_receiveData ( SPI_RegDef_t* pSPI , uint8_t * RxBuffer , uint32_t len);
 
@@ -219,12 +236,12 @@ void SPI_IRQPriorityConfig( uint8_t IRQNumber, uint8_t IRQPriority);
  *
  * @param[0]		IRQNumber - interrupt number we want to enable interrupt of .
  * @param[1]        EnOrDi - Enable or disable macro.
- * 
+ * @param[2]        pSPI    - base address of the spi peripheral used
  * @return			nothing.
  *
  * @note
  ************************************************************/
-void SPI_IRQConfig(uint8_t IRQNumber  , uint8_t EnorDi);
+void SPI_IRQConfig(uint8_t IRQNumber  , uint8_t EnorDi, SPI_RegDef_t* pSPI, uint8_t irq_type);
 
 
 
