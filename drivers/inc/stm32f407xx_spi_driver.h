@@ -14,6 +14,10 @@
 #define LSB                 1
 #define MSB                 0
 
+#define SPI_READY           0
+#define SPI_BUSY_IN_TX      1
+#define SPI_BUSY_IN_RX      2
+
 
 typedef struct {
 
@@ -25,7 +29,7 @@ typedef struct {
     uint8_t SPI_SSM;                // @SPI_SSM
     uint8_t SPI_SclkSpeed;          // @SPI_SclkSpeed
     uint8_t SPI_MSB_LSB ;            // @SPI_MSB_LSB
-    uint8_t SPI_IRQtype;
+    uint8_t SPI_IRQtype;            // @SPI_IRQtype
 } SPI_Config_t;
 
 // @SPI_DeviceMode
@@ -118,18 +122,25 @@ typedef struct {
 
 
 typedef struct {
-    SPI_Config_t  SPI_config;
-    SPI_RegDef_t * pSPI;
+    SPI_Config_t    SPI_config;
+    SPI_RegDef_t    * pSPI;
+    uint8_t         * SPI_TxBuffer;
+    uint8_t         * SPI_RxBuffer;
+    uint8_t         SPI_TxState;
+    uint8_t         SPI_RxState;
+    uint32_t        SPI_TxLength;
+    uint32_t        SPI_RxLength;
+
 }SPI_Handle_t;
 
 
 //macro for reading dff bit in cr1 register
-#define READ_DFF_SPI_CR1( peripheral_baseAddr) (peripheral_baseAddr->CR1 &= 1<<SPI_CR1_DFF)
+#define READ_DFF_SPI_CR1( peripheral_baseAddr) (peripheral_baseAddr->CR1 & 1<<SPI_CR1_DFF)
 
 
 // macros for read txe and rxne flag in spi status register 
-#define READ_TXE_SPI_SR( peripheral_baseAddr) (peripheral_baseAddr->SR &= 1<<SPI_SR_TXE)
-#define READ_RXNE_SPI_SR( peripheral_baseAddr) (peripheral_baseAddr->SR &= 1<<SPI_SR_RXNE)
+#define READ_TXE_SPI_SR( peripheral_baseAddr) (peripheral_baseAddr->SR & 1<<SPI_SR_TXE)
+#define READ_RXNE_SPI_SR( peripheral_baseAddr) (peripheral_baseAddr->SR & 1<<SPI_SR_RXNE)
 
 
 
@@ -194,19 +205,20 @@ uint8_t SPI_sendData_blocking ( SPI_RegDef_t* pSPI , uint8_t * TxBuffer , uint32
 
 /************************************************************
  *
- * @fn				SPI_receiveData
+ * @fn				SPI_receiveData_blocking
  *
  * @brief 			receive data over spi peripheral
  *
  * @param[0]		pSPI - SPI_RegDef_t - base address of the peripheral we want to reseive
  * @param[1]        RxBuffer - 8 bit we want to receive .
- * @param[2]        len        - length of the data that we are going to receive
+ * @param[2]        len        - length of the data that we are going to receive in bytes
  * 
- * @return			returns the 8 bit that we received.
+ * @return			0 or 1 , depending on the success of the receive process
  *
  * @note            this api will block the execution as it uses while loop
  ************************************************************/
-uint8_t SPI_receiveData ( SPI_RegDef_t* pSPI , uint8_t * RxBuffer , uint32_t len);
+uint8_t SPI_receiveData_blocking ( SPI_RegDef_t* pSPI , uint8_t * RxBuffer , uint32_t len);
+
 
 
 /************************************************************
@@ -236,14 +248,74 @@ void SPI_IRQPriorityConfig( uint8_t IRQNumber, uint8_t IRQPriority);
  *
  * @param[0]		IRQNumber - interrupt number we want to enable interrupt of .
  * @param[1]        EnOrDi - Enable or disable macro.
- * @param[2]        pSPI    - base address of the spi peripheral used
+ *
  * @return			nothing.
  *
  * @note
  ************************************************************/
-void SPI_IRQConfig(uint8_t IRQNumber  , uint8_t EnorDi, SPI_RegDef_t* pSPI, uint8_t irq_type);
+// void SPI_IRQConfig(uint8_t IRQNumber  , uint8_t EnorDi, SPI_RegDef_t* pSPI, uint8_t irq_type);
+void SPI_IRQConfig(uint8_t IRQNumber  , uint8_t EnorDi);
 
 
+/************************************************************
+ *
+ * @fn				SPI_PeripheralControl
+ *
+ * @brief 			to enable or disable the SPE bit in the CR1 register .
+ *
+ * @param[0]		pSPI - SPI_RegDef_t structure pointer.
+ * @param[1]        EnOrDi - Enable or disable macro.
+ * @return			nothing.
+ *
+ * @note
+ ************************************************************/
+void SPI_PeripheralControl(SPI_RegDef_t* pSPI, uint8_t EnOrDi);
 
-void SPI_IRQHandling(uint8_t pinNumber);
+
+/************************************************************
+ *
+ * @fn				SPI_IRQHandling
+ * 
+ * @brief 			handle the interrupt.
+ *
+ * @param[0]		spi_handle_ptr - SPI_Handle_t handle stucture pointer.
+ * 
+ * @return			nothing.
+ *
+ * @note
+ ************************************************************/
+void SPI_IRQHandling(SPI_Handle_t * spi_handle_ptr);
+
+/************************************************************
+ *
+ * @fn				SPI_sendData_byInterrupt
+ * 
+ * @brief 			send data by interrupt method.
+ *
+ * @param[0]		spi_handle_ptr - SPI_Handle_t structure pointer.
+ * @param[1]		dataLenght - number on which irq will be delivered.
+ * @param[2]		dataBuffer - starting address of the data we need to transmit
+ *
+ * @return			uint8_t - this api will return the state of the peripheral , 
+ *
+ * @note
+ ************************************************************/
+uint8_t SPI_sendData_byInterrupt( SPI_Handle_t * spi_handle_ptr , uint32_t dataLenght, uint8_t * dataBuffer);
+
+/************************************************************
+ *
+ * @fn				SPI_receiveData_byInterrupt
+ * 
+ * @brief 			send data by interrupt method.
+ *
+ * @param[0]		spi_handle_ptr - SPI_Handle_t structure pointer.
+ * @param[1]		dataLenght - number on which irq will be delivered.
+ * @param[2]		dataBuffer - starting address of the data we need to transmit
+ *
+ * @return			uint8_t - this api will return the state of the peripheral 
+ *
+ * @note
+ ************************************************************/
+uint8_t SPI_receiveData_byInterrupt( SPI_Handle_t * spi_handle_ptr , uint32_t dataLenght, uint8_t * RxBuffer);
+
 #endif /* INC_STM32F407XX_SPI_DRIVER_H_ */

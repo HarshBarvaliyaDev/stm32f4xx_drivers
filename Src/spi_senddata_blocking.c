@@ -10,7 +10,7 @@
 
 int main(){
 
-	char data[] = "hello world!"; 
+	
 
 	// initialize gpio handle
 	GPIO_Handle_t spi_pins ;
@@ -47,9 +47,12 @@ int main(){
 	spiHandle.SPI_config.SPI_IRQtype = SPI_NOIRQ;
 	spiHandle.SPI_config.SPI_MSB_LSB = SPI_MSB_FIRST;
 	spiHandle.SPI_config.SPI_SclkSpeed = SPI_SCLK_SPEED_DIV2;
-	spiHandle.SPI_config.SPI_SSM = SOFTWARE_SLAVE_DI;
+	spiHandle.SPI_config.SPI_SSM = SOFTWARE_SLAVE_EN;
 	SPI_init(&spiHandle);
 
+	char data[] = "hello world!"; 
+
+	SPI_PeripheralControl(SPI2 , ENABLE);
 	SPI_sendData_blocking(spiHandle.pSPI , data , sizeof( data));
 	return 0;
 }

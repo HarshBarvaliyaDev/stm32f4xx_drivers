@@ -1,8 +1,6 @@
 #include <stm32f407xx_gpio_driver.h>
 
-void delay(int sec) {
-    for(int i = 0 ; i < sec*1000 ; i++);
-}
+
 
 
 volatile int control = 1;

@@ -1,11 +1,9 @@
 
 #include <stm32f407xx_gpio_driver.h>
 
-void delay(void) {
-    for(int i = 0 ; i < 500000 ; i++);
-}
 
 int main(){
+    
     GPIO_Handle_t LED;
     LED.pGPIOx = GPIOA;
     LED.GPIO_PinConfig.gpioPinNumber = GPIO_PIN_NUM_6;
@@ -20,7 +18,7 @@ int main(){
     GPIO_Init(&LED);
     while(1){
         GPIO_ToggleOutputPin( LED.pGPIOx , LED.GPIO_PinConfig.gpioPinNumber);
-        delay();
+        delay(100);
     }
 
     return 0;

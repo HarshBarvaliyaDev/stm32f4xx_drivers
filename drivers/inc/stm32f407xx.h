@@ -13,13 +13,13 @@
 
 //*************************** MCU specific register ARM
 //interrupt set enable register (ARM)
-#define NVIC_ISERx                                          (0xE000E100U)
+#define NVIC_ISERx                                          (uint32_t *)(0xE000E100U)
 
 //interrupt clear enable register   (ARM)
-#define NVIC_ICERx                                          (0xE000E180U)
+#define NVIC_ICERx                                          (uint32_t *)(0xE000E180U)
 
 //interrupt priority register (ARM)
-#define NVIC_IPRx                                           (0xE000E400U)
+#define NVIC_IPRx                                           (uint32_t *)(0xE000E400U)
 
 #define NoChangeInPriority                                  -5
 
@@ -193,6 +193,24 @@ typedef struct
 #define SPI3															((SPI_RegDef_t *)SPI3_BASEADDR)
 //clock enable macros for GPIOx peripherals
 
+
+// THIS MACROS REPRESENT ON WHICH LINE OF NVIC , IRQ WILL BE DELIVERD
+#define IRQ_NO_EXTI_0               6
+#define IRQ_NO_EXTI_1               7
+#define IRQ_NO_EXTI_2               8
+#define IRQ_NO_EXTI_3               9
+#define IRQ_NO_EXTI_4               10
+#define IRQ_NO_EXTI_5_TO_9          23
+#define IRQ_NO_EXTI_10_TO_15        40
+
+// SPI INTERRUPT MACTOS
+#define IRQ_NO_SPI1_GLOBAL       35
+#define IRQ_NO_SPI2_GLOBAL       36
+#define IRQ_NO_SPI3_GLOBAL       51
+
+
+
+
 #define GPIOA_PCLK_EN() 	(RCC->AHB1ENR |= 1<<0)
 #define GPIOB_PCLK_EN() 	(RCC->AHB1ENR |= 1<<1)
 #define GPIOC_PCLK_EN() 	(RCC->AHB1ENR |= 1<<2)
@@ -292,6 +310,12 @@ typedef struct
 #define DISABLE 		0
 #define SET 			ENABLE
 #define RESET 			DISABLE
+#define SUCCESS      1
+#define FAIL         0      
+
+void delay(int sec) {
+   for(int i = 0 ; i < sec*1000 ; i++);
+}
 
 
 #endif /* INC_STM32F407XX_H_ */

@@ -195,11 +195,11 @@ void GPIO_IRQConfig(uint8_t IRQNumber  , uint8_t EnorDi){
 
 	if( EnorDi == ENABLE){
 		// enable interrupt by ARM registers  
-		*((uint32_t *)(NVIC_ISERx + (IRQNumber/32)*4)) |= 1 << IRQNumber%32; 
+		*((NVIC_ISERx + (IRQNumber/32))) |= 1 << IRQNumber%32; 
 
 	}else{
 		//disable interrupt by arm register
-		*((uint32_t *)(NVIC_ICERx + (IRQNumber/32)*4)) |= 1 << IRQNumber%32; 
+		*((NVIC_ICERx + (IRQNumber/32))) |= 1 << IRQNumber%32; 
 	}
 
 
@@ -211,8 +211,8 @@ void GPIO_IRQPriorityConfig( uint8_t IRQNumber, uint8_t IRQPriority){
 	if ( IRQPriority <= NoChangeInPriority)
 		return;
 	
-	*((uint32_t *)(NVIC_IPRx + (IRQNumber/4)*4)) &=  ~(0xFF << (IRQNumber%4)*8);
-	*((uint32_t *)(NVIC_IPRx + (IRQNumber/4)*4)) |=  IRQPriority << (IRQNumber%4)*8;
+	*((NVIC_IPRx + (IRQNumber/4))) &=  ~(0xFF << (IRQNumber%4)*8);
+	*((NVIC_IPRx + (IRQNumber/4))) |=  IRQPriority << (IRQNumber%4)*8;
 		
 }
 
