@@ -306,12 +306,13 @@ typedef struct
 
 
 // some generic macros
-#define ENABLE 		1
+#define ENABLE 			1
 #define DISABLE 		0
 #define SET 			ENABLE
 #define RESET 			DISABLE
-#define SUCCESS      1
-#define FAIL         0      
+#define SUCCESS      	1
+#define FAIL         	0
+#define __IO			volatile
 
 void delay(int sec) {
    for(int i = 0 ; i < sec*1000 ; i++);
