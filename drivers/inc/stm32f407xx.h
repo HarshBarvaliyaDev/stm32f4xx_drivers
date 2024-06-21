@@ -191,7 +191,13 @@ typedef struct
 #define SPI1															((SPI_RegDef_t *)SPI1_BASEADDR)
 #define SPI2															((SPI_RegDef_t *)SPI2_BASEADDR)
 #define SPI3															((SPI_RegDef_t *)SPI3_BASEADDR)
-//clock enable macros for GPIOx peripherals
+
+
+
+// I2C POINTERS
+#define I2C1															((I2C_RegDef_t *)I2C1_BASEADDR)
+#define I2C2															((I2C_RegDef_t *)I2C2_BASEADDR)
+#define I2C3															((I2C_RegDef_t *)I2C3_BASEADDR)
 
 
 // THIS MACROS REPRESENT ON WHICH LINE OF NVIC , IRQ WILL BE DELIVERD
@@ -318,5 +324,7 @@ void delay(int sec) {
    for(int i = 0 ; i < sec*1000 ; i++);
 }
 
-
+#include "stm32f407xx_i2c_driver.h"
+#include "stm32f407xx_gpio_driver.h"
+#include "stm32f407xx_spi_driver.h"
 #endif /* INC_STM32F407XX_H_ */
