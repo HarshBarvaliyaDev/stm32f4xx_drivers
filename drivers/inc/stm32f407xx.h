@@ -89,7 +89,39 @@ typedef struct
    volatile uint32_t AFR[2];   /*!< GPIO alternate function registers,     Address offset: 0x20-0x24 */
 } GPIO_RegDef_t;
 
+#define GPIO_MODER_PIN0             0
+#define GPIO_MODER_PIN1             2
+#define GPIO_MODER_PIN2             4
+#define GPIO_MODER_PIN3             6
+#define GPIO_MODER_PIN4             8
+#define GPIO_MODER_PIN5             10
+#define GPIO_MODER_PIN6             12
+#define GPIO_MODER_PIN7             14
+#define GPIO_MODER_PIN8             16
+#define GPIO_MODER_PIN9             18
+#define GPIO_MODER_PIN10            20
+#define GPIO_MODER_PIN11            22
+#define GPIO_MODER_PIN12            24
+#define GPIO_MODER_PIN13            26
+#define GPIO_MODER_PIN14            28
+#define GPIO_MODER_PIN15            30
 
+#define GPIO_AF_PIN_0                0
+#define GPIO_AF_PIN_1                4
+#define GPIO_AF_PIN_2                8
+#define GPIO_AF_PIN_3                12
+#define GPIO_AF_PIN_4                16
+#define GPIO_AF_PIN_5                20
+#define GPIO_AF_PIN_6                24
+#define GPIO_AF_PIN_7                28
+#define GPIO_AF_PIN_8                0
+#define GPIO_AF_PIN_9                4
+#define GPIO_AF_PIN_10               8
+#define GPIO_AF_PIN_11               12
+#define GPIO_AF_PIN_12               16
+#define GPIO_AF_PIN_13               20
+#define GPIO_AF_PIN_14               24
+#define GPIO_AF_PIN_15               28
 
 //rcc clock control register structure.
 
@@ -127,7 +159,27 @@ typedef struct
    volatile uint32_t PLLI2SCFGR;    /*!< RCC PLLI2S configuration register,                           Address offset: 0x84 */
 } RCC_RegDef_t;
 
-
+//bitpositions for AHB1ENR 
+#define AHB1ENR_GPIOAEN                0
+#define AHB1ENR_GPIOBEN                1
+#define AHB1ENR_GPIOCEN                2
+#define AHB1ENR_GPIODEN                3
+#define AHB1ENR_GPIOEEN                4
+#define AHB1ENR_GPIOFEN                5
+#define AHB1ENR_GPIOGEN                6
+#define AHB1ENR_GPIOHEN                7
+#define AHB1ENR_GPIOIEN                8
+#define AHB1ENR_CRCEN                  12
+#define AHB1ENR_BKPSRAMEN              18
+#define AHB1ENR_CCMDAT                 20
+#define AHB1ENR_DMA1EN                 21
+#define AHB1ENR_DMA2EN                 22
+#define AHB1ENR_ETHMACEN               25
+#define AHB1ENR_ETHMACTXEN             26
+#define AHB1ENR_ETHMACRXEN             27
+#define AHB1ENR_ETHMACPTPEN            28
+#define AHB1ENR_OTGHSEN                29
+#define AHB1ENR_OTGHSULPIEN            30
 // EXTI Register structure 
 typedef struct {
    volatile uint32_t IMR;    /*!< EXTI Interrupt mask register,            Address offset: 0x00 */
@@ -320,9 +372,7 @@ typedef struct
 #define FAIL         	0
 #define __IO			volatile
 
-void delay(int sec) {
-   for(int i = 0 ; i < sec*1000 ; i++);
-}
+
 
 #include "stm32f407xx_i2c_driver.h"
 #include "stm32f407xx_gpio_driver.h"
